@@ -17,11 +17,13 @@ class exim::params {
   ### Application related parameters
 
   $package = $::operatingsystem ? {
-    default => 'exim',
+    /(?i:Debian|Ubuntu|Mint)/ => 'exim4',
+    default                   => 'exim',
   }
 
   $service = $::operatingsystem ? {
-    default => 'exim',
+    /(?i:Debian|Ubuntu|Mint)/ => 'exim4',
+    default                   => 'exim',
   }
 
   $service_status = $::operatingsystem ? {
@@ -44,8 +46,13 @@ class exim::params {
     default => '/etc/exim',
   }
 
+  # For semplicity and lack of time to deploy a sensible configuration we consider
+  # as exim config file on Ubuntu/Debian the debconf file, which is evaluated when the service
+  # is started. This file has not the format and the syntax of the official exim file.
+
   $config_file = $::operatingsystem ? {
-    default => '/etc/exim/exim.conf',
+    /(?i:Debian|Ubuntu|Mint)/ => '/etc/exim4/update-exim4.conf.conf',
+    default                   => '/etc/exim/exim.conf',
   }
 
   $config_file_mode = $::operatingsystem ? {
@@ -57,7 +64,8 @@ class exim::params {
   }
 
   $config_file_group = $::operatingsystem ? {
-    default => 'root',
+    /(?i:Debian|Ubuntu|Mint)/ => 'root',
+    default                   => 'mail',
   }
 
   $config_file_init = $::operatingsystem ? {
@@ -81,7 +89,7 @@ class exim::params {
     default => '/var/log/exim/exim.log',
   }
 
-  $port = '42'
+  $port = '25'
   $protocol = 'tcp'
 
   # General Settings
@@ -100,7 +108,7 @@ class exim::params {
   ### General module variables that can have a site or per module default
   $monitor = false
   $monitor_tool = ''
-  $monitor_target = $::ipaddress
+  $monitor_target = '127.0.0.1'
   $firewall = false
   $firewall_tool = ''
   $firewall_src = '0.0.0.0/0'
