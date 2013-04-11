@@ -31,7 +31,8 @@ class exim::params {
   }
 
   $process = $::operatingsystem ? {
-    default => 'exim',
+    /(?i:Debian|Ubuntu|Mint)/ => 'exim4',
+    default                   => 'exim',
   }
 
   $process_args = $::operatingsystem ? {
@@ -39,7 +40,8 @@ class exim::params {
   }
 
   $process_user = $::operatingsystem ? {
-    default => 'exim',
+    'Debian' => 'Debian-exim',
+    default  => 'exim',
   }
 
   $config_dir = $::operatingsystem ? {
