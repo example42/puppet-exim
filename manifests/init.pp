@@ -128,7 +128,7 @@
 # [*noops*]
 #   Set noop metaparameter to true for all the resources managed by the module.
 #   Basically you can run a dryrun for this specific module if you set
-#   this to true. Default: false
+#   this to true. Default: undef
 #
 # Default class params - As defined in exim::params.
 # Note that these variables are mostly defined and used in the module itself,
@@ -263,7 +263,6 @@ class exim (
   $bool_firewall=any2bool($firewall)
   $bool_debug=any2bool($debug)
   $bool_audit_only=any2bool($audit_only)
-  $bool_noops=any2bool($noops)
 
   ### Definition of some variables used in the module
   $manage_package = $exim::bool_absent ? {
@@ -338,7 +337,7 @@ class exim (
   ### Managed resources
   package { $exim::package:
     ensure  => $exim::manage_package,
-    noop    => $exim::bool_noops,
+    noop    => $exim::noops,
   }
 
   service { 'exim':
@@ -348,7 +347,7 @@ class exim (
     hasstatus  => $exim::service_status,
     pattern    => $exim::process,
     require    => Package[$exim::package],
-    noop       => $exim::bool_noops,
+    noop       => $exim::noops,
   }
 
   file { 'exim.conf':
@@ -363,7 +362,7 @@ class exim (
     content => $exim::manage_file_content,
     replace => $exim::manage_file_replace,
     audit   => $exim::manage_audit,
-    noop    => $exim::bool_noops,
+    noop    => $exim::noops,
   }
 
   # The whole exim configuration directory can be recursively overriden
@@ -379,7 +378,7 @@ class exim (
       force   => $exim::bool_source_dir_purge,
       replace => $exim::manage_file_replace,
       audit   => $exim::manage_audit,
-      noop    => $exim::bool_noops,
+      noop    => $exim::noops,
     }
   }
 
@@ -397,7 +396,7 @@ class exim (
       ensure    => $exim::manage_file,
       variables => $classvars,
       helper    => $exim::puppi_helper,
-      noop      => $exim::bool_noops,
+      noop      => $exim::noops,
     }
   }
 
@@ -411,7 +410,7 @@ class exim (
         target   => $exim::monitor_target,
         tool     => $exim::monitor_tool,
         enable   => $exim::manage_monitor,
-        noop     => $exim::bool_noops,
+        noop     => $exim::noops,
       }
     }
     if $exim::service != '' {
@@ -423,7 +422,7 @@ class exim (
         argument => $exim::process_args,
         tool     => $exim::monitor_tool,
         enable   => $exim::manage_monitor,
-        noop     => $exim::bool_noops,
+        noop     => $exim::noops,
       }
     }
   }
@@ -440,7 +439,7 @@ class exim (
       direction   => 'input',
       tool        => $exim::firewall_tool,
       enable      => $exim::manage_firewall,
-      noop        => $exim::bool_noops,
+      noop        => $exim::noops,
     }
   }
 
@@ -454,7 +453,7 @@ class exim (
       owner   => 'root',
       group   => 'root',
       content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'),
-      noop    => $exim::bool_noops,
+      noop    => $exim::noops,
     }
   }
 
