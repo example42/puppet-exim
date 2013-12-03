@@ -370,6 +370,9 @@ class exim (
     file { 'exim.dir':
       ensure  => directory,
       path    => $exim::config_dir,
+      mode    => $exim::config_file_mode,
+      owner   => $exim::config_file_owner,
+      group   => $exim::config_file_group,
       require => Package[$exim::package],
       notify  => $exim::manage_service_autorestart,
       source  => $exim::source_dir,
