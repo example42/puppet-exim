@@ -45,6 +45,7 @@ class exim::params {
   }
 
   $config_dir = $::operatingsystem ? {
+    /(?i:Debian|Ubuntu|Mint)/ => '/etc/exim4',
     default => '/etc/exim',
   }
 
