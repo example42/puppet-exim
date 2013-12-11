@@ -77,7 +77,8 @@ class exim::params {
   }
 
   $pid_file = $::operatingsystem ? {
-    default => '/var/run/exim.pid',
+    /(?i:Debian|Ubuntu|Mint)/ => '/var/run/exim4/exim.pid',
+    default                   => '/var/run/exim.pid',
   }
 
   $data_dir = $::operatingsystem ? {
