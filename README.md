@@ -39,7 +39,7 @@ For detailed info about the logic and usage patterns of Example42 modules check 
           absent => true
         }
 
-* Enable auditing without without making changes on existing exim configuration *files*
+* Enable auditing without making changes on existing exim configuration *files*
 
         class { 'exim':
           audit_only => true
