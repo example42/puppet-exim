@@ -376,6 +376,7 @@ class exim (
       require => Package[$exim::package],
       notify  => $exim::manage_service_autorestart,
       source  => $exim::source_dir,
+      sourceselect => all,
       recurse => true,
       purge   => $exim::bool_source_dir_purge,
       force   => $exim::bool_source_dir_purge,
