@@ -336,18 +336,18 @@ class exim (
 
   ### Managed resources
   package { $exim::package:
-    ensure  => $exim::manage_package,
-    noop    => $exim::noops,
+    ensure => $exim::manage_package,
+    noop   => $exim::noops,
   }
 
   service { 'exim':
-    ensure     => $exim::manage_service_ensure,
-    name       => $exim::service,
-    enable     => $exim::manage_service_enable,
-    hasstatus  => $exim::service_status,
-    pattern    => $exim::process,
-    require    => Package[$exim::package],
-    noop       => $exim::noops,
+    ensure    => $exim::manage_service_ensure,
+    name      => $exim::service,
+    enable    => $exim::manage_service_enable,
+    hasstatus => $exim::service_status,
+    pattern   => $exim::process,
+    require   => Package[$exim::package],
+    noop      => $exim::noops,
   }
 
   file { 'exim.conf':
@@ -368,21 +368,21 @@ class exim (
   # The whole exim configuration directory can be recursively overriden
   if $exim::source_dir {
     file { 'exim.dir':
-      ensure  => directory,
-      path    => $exim::config_dir,
-      mode    => $exim::config_file_mode,
-      owner   => $exim::config_file_owner,
-      group   => $exim::config_file_group,
-      require => Package[$exim::package],
-      notify  => $exim::manage_service_autorestart,
-      source  => $exim::source_dir,
+      ensure       => directory,
+      path         => $exim::config_dir,
+      mode         => $exim::config_file_mode,
+      owner        => $exim::config_file_owner,
+      group        => $exim::config_file_group,
+      require      => Package[$exim::package],
+      notify       => $exim::manage_service_autorestart,
+      source       => $exim::source_dir,
       sourceselect => all,
-      recurse => true,
-      purge   => $exim::bool_source_dir_purge,
-      force   => $exim::bool_source_dir_purge,
-      replace => $exim::manage_file_replace,
-      audit   => $exim::manage_audit,
-      noop    => $exim::noops,
+      recurse      => true,
+      purge        => $exim::bool_source_dir_purge,
+      force        => $exim::bool_source_dir_purge,
+      replace      => $exim::manage_file_replace,
+      audit        => $exim::manage_audit,
+      noop         => $exim::noops,
     }
   }
 
